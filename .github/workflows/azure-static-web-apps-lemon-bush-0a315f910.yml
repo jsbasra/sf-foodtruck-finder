@@ -31,6 +31,14 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+  e2e-tests:
+    runs-on: ubuntu-latest # or macos-latest, windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - uses: microsoft/playwright-github-action@v1
+      - name: Install dependencies and run tests
+        run: npm install && npm test
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
