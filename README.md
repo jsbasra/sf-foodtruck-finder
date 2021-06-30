@@ -14,5 +14,6 @@ To deploy the infrastructure for this application please look at arm.json in Azu
 After creating and deploying the Infrstructure. The Azure Function will need to be configured. Go to the Kudu Console advanced options and configure the Azure Function as follows:
 Add a folder named "bin" to "C:\home\site\wwwroot\" and then upload System.Device.dll to "C:\home\site\wwwroot\bin\" so that Get-SFfoodtruck can access it. This dll provides the .NET <a href="https://docs.microsoft.com/en-us/dotnet/api/system.device.location.geocoordinate?view=netframework-4.8">GeoCoordinate</a> Class and its methods. The PowerShell Script in the Azure Function uses the <a href="https://docs.microsoft.com/en-us/dotnet/api/system.device.location.geocoordinate.getdistanceto?view=netframework-4.8">GeoCoordinate.GetDistanceTo </a> method to calculate distances between the user and the food trucks. 
 
-<h3>Future Development</h3>
+<h3>Future Development</h3><br>
+
 Future Development will involve creation of new features including the ability to manually enter a location and incorporation of more food truck datasets so that the application can be used outside San Franciso. If you would like to make a pull request, the CI/CD pipeline is setup using GitHub Actions and automated testing via PlayWright. 
