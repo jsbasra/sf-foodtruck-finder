@@ -18,7 +18,8 @@ Add-Type -Path "C:\home\site\wwwroot\bin\System.Device.dll"
 
     $foodtruckuri = "https://data.sfgov.org/api/views/rqzj-sfat/rows.csv"
     $foodtruckdata = $(Invoke-WebRequest -Uri $foodtruckuri).content | ConvertFrom-Csv -Delimiter ","
-    if($null -eq $foodtruckdata){$foodtruckuri = "https://msfoodtruck.blob.core.windows.net/data/Mobile_Food_Facility_Permit.csv"
+    if($null -eq $foodtruckdata){
+        $foodtruckuri = "https://storageaccountmsengb94e.blob.core.windows.net/backupdata/Mobile_Food_Facility_Permit.csv"
         $foodtruckdata = $(Invoke-WebRequest -Uri $foodtruckuri).content | ConvertFrom-Csv -Delimiter ","
     }
     $usercordinate = [GeoCoordinate]::new($lat,$long)
