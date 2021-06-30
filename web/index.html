@@ -92,11 +92,8 @@
 
 
       for (var i = 0; i < locations.length; i++) {
-          Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
-          var searchManager = new Microsoft.Maps.Search.SearchManager(map);
-          reverseGeocode();
-        });
-
+        Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+        var searchManager = new Microsoft.Maps.Search.SearchManager(map);
         var reverseGeocodeRequestOptions = {
           location: new Microsoft.Maps.Location(locations[i].Latitude,locations[i].Longitude),
           callback: function (answer, userData) {
@@ -115,12 +112,13 @@
           title: 'Pin ' + i,
           description: 'Food Truck' + i
         };
-
+        
         //Add a click event handler to the pushpin.
         Microsoft.Maps.Events.addHandler(pin, 'click', pushpinClicked);
 
         //Add pushpin to the map.
         map.entities.push(pin);
+        });
       }
     }
 
