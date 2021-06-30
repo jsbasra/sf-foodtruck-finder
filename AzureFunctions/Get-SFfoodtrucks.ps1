@@ -1,6 +1,7 @@
 using namespace System.Net
 using namespace System.Device.Location
 
+
 # Input bindings are passed in via param block.
 param($Request, $TriggerMetadata)
 
@@ -13,10 +14,13 @@ Write-Host "PowerShell HTTP trigger function processed a request."
 [Double]$lat = $Request.Body.Lat
 [Double]$long = $Request.Body.long
 
-    Add-Type -Path "C:\home\site\wwwroot\bin\System.Device.dll"
+Add-Type -Path "C:\home\site\wwwroot\bin\System.Device.dll"
 
     $foodtruckuri = "https://data.sfgov.org/api/views/rqzj-sfat/rows.csv"
     $foodtruckdata = $(Invoke-WebRequest -Uri $foodtruckuri).content | ConvertFrom-Csv -Delimiter ","
+    if($null -eq $foodtruckdata){$foodtruckuri = "https://msfoodtruck.blob.core.windows.net/data/Mobile_Food_Facility_Permit.csv"
+        $foodtruckdata = $(Invoke-WebRequest -Uri $foodtruckuri).content | ConvertFrom-Csv -Delimiter ","
+    }
     $usercordinate = [GeoCoordinate]::new($lat,$long)
     $hash = @{}
 
