@@ -88,12 +88,11 @@
 
       //Create random locations in the map bounds.
       //var randomLocations = Microsoft.Maps.TestDataGenerator.getLocations(5, );
-      if (!searchManager) {
         Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
           searchManager = new Microsoft.Maps.Search.SearchManager(map);
           reverseGeocode();
         });
-      }
+
       for (var i = 0; i < locations.length; i++) {
 
         var reverseGeocodeRequestOptions = {
