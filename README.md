@@ -1,7 +1,7 @@
 # sf-foodtruck-finder
 App that finds the 5 nearest food trucks in San Francisco based on the user's current location. 
 
-The app is accessiable at: <a href="https://msfoodtruck.z13.web.core.windows.net">basra.win</a>
+The app is accessiable at: <a href="https://basra.win">basra.win</a>
 
 The application leverages the data provided by 
 San Francisco's food truck open dataset <a href="https://data.sfgov.org/Economy-and-Community/Mobile-Food-Facility-Permit/rqzj-sfat/data" rel="nofollow">located here</a> and an endpoint with a <a href="https://data.sfgov.org/api/views/rqzj-sfat/rows.csv" rel="nofollow">CSV dump of the latest data</a>.
