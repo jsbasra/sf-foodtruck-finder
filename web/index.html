@@ -66,7 +66,7 @@
           });
           //console.log(tableData);
           //console.log(typeof tableData);
-          const locations = tableData.map(({ Location }) => ({ Location }))
+          const locations = tableData.map(({Latitude,Longitude}) => ({Latitude,Longitude}))
           //console.log(locations)
           UpdateMap(locations)
         };
