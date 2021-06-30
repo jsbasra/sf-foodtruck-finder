@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SF FoodTrucks</title>
+  <link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
+  <script type='text/javascript'
+    src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=ArVkVBWZgCzGEpWISQwd4V_OB-w0K67VZnUZTu6l2oeuhlNFnHaye27_wnVIIuYa'
+    async defer></script>
+  <style>
+    #myMap {
+      position: relative;
+      width: 600px;
+      height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="locator">
+    <h1>Click the button to get the five nearest food trucks in near you.</h1>
+    <br>
+    <button onclick="getLocation()">Display Food Trucks</button>
+  </div>
+
+  <div id="data-table"></div>
+  <div id="myMap"></div>
+  <div id="printoutPanel"></div>
+  <script>
+
+    var x = document.getElementById("locator");
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPositionTrucks);
+      } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
+
+    function showPositionTrucks(position) {
+      x.innerHTML = "Your Location: <br> Latitude: " + position.coords.latitude +
+        "&emsp;Longitude: " + position.coords.longitude + "<br><h2>The Nearest Five Food Trucks in San Francisco</h2>";
+      const url = 'https://getsf-foodtrucks.azurewebsites.net/api/Get-SFFoodTrucks?code=Ha6RHHSTnGB7t6/PbsCskUQcO00twlVhfuTS5rnEnq8pnhEaAa/Hag==';
+      var Http = new XMLHttpRequest();
+      Http.open("POST", url, true);
+      Http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      var req = '{"lat":"' + position.coords.latitude + '","long":"' + position.coords.longitude + '"}';
+      Http.send(req);
+      Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          var tableData = JSON.parse(this.responseText);
+          var table = new Tabulator("#data-table", {
+            data: tableData,
+            layout: "fitDataStretch",
+            virtualDomHoz: true,
+            columns: [
+              { title: "Name", field: "Applicant" },
+              { title: "Location", field: "Location", hozAlign: "center" },
+              { title: "Location Description", field: "LocationDescription", hozAlign: "left", sorter: "number" },
+              { title: "Food Items", field: "FoodItems", hozAlign: "left" },
+              //{ title: "Schedule", field: "Schedule", hozAlign: "left" },
+            ],
+          });
+          //console.log(tableData);
+          //console.log(typeof tableData);
+          const locations = tableData.map(({ Location }) => ({ Location }))
+          //console.log(locations)
+          UpdateMap(locations)
+        };
+      }
+    }
+
+    function GetMap() { var map = new Microsoft.Maps.Map('#myMap'); }
+
+    function UpdateMap(locations) {
+
+      var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});
+      //Create an infobox at the center of the map but don't show it.
+      var infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
+        visible: false
+      });
+
+      //Assign the infobox to a map instance.
+      infobox.setMap(map);
+
+      //Create random locations in the map bounds.
+      //var randomLocations = Microsoft.Maps.TestDataGenerator.getLocations(5, );
+      var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+
+      for (var i = 0; i < locations.length; i++) {
+
+        var reverseGeocodeRequestOptions = {
+          location: new Microsoft.Maps.Location(locations[i]),
+          callback: function (answer, userData) {
+            map.setView({ bounds: answer.bestView });
+            map.entities.push(new Microsoft.Maps.Pushpin(reverseGeocodeRequestOptions.location));
+            document.getElementById('printoutPanel').innerHTML =
+              answer.address.formattedAddress;
+          }
+
+        };
+        var pin = new Microsoft.Maps.Pushpin(reverseGeocodeRequestOptions.location);
+        searchManager.reverseGeocode(reverseGeocodeRequestOptions);
+
+        //Store some metadata with the pushpin.
+        pin.metadata = {
+          title: 'Pin ' + i,
+          description: 'Food Truck' + i
+        };
+
+        //Add a click event handler to the pushpin.
+        Microsoft.Maps.Events.addHandler(pin, 'click', pushpinClicked);
+
+        //Add pushpin to the map.
+        map.entities.push(pin);
+      }
+    }
+
+    function pushpinClicked(e) {
+      //Make sure the infobox has metadata to display.
+      if (e.target.metadata) {
+        //Set the infobox options with the metadata of the pushpin.
+        infobox.setOptions({
+          location: e.target.getLocation(),
+          title: e.target.metadata.title,
+          description: e.target.metadata.description,
+          visible: true
+        });
+      }
+    }
+  </script>
+
+</body>
+
+</html>
