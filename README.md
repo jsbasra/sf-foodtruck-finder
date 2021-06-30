@@ -1,7 +1,7 @@
 # sf-foodtruck-finder
 App that finds the 5 nearest food trucks in San Francisco based on the user's current location. 
 
-The app is accessiable at: <a href="https://basra.win">basra.win</a>
+The app is accessible at: <a href="https://basra.win">basra.win</a>
 
 The application is hosted Microsoft Azure and utilizes a <a href="https://github.com/jsbasra/sf-foodtruck-finder/blob/main/index.html">static website</a> that is the frontend for the application and an Azure Function that acts as the backend by executing <a href="https://github.com/jsbasra/sf-foodtruck-finder/blob/main/Get-SFfoodtrucks">powershell script</a> located in the Azure Functions folder. 
 
