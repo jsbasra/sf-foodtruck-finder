@@ -1,7 +1,7 @@
 const { webkit, devices } = require('@playwright/test');
-const iPhone11 = devices['iPhone 11 Pro'];
-
-(async () => {
+test('basic test', async ({ page }) => {
+  const iPhone11 = devices['iPhone 11 Pro'];
+  (async () => {
   const browser = await webkit.launch();
   const context = await browser.newContext({
     ...iPhone11,
@@ -12,7 +12,7 @@ const iPhone11 = devices['iPhone 11 Pro'];
   const page = await context.newPage();
   await page.goto('https://basra.win');
   await page.click('text="Display Food Trucks"');
-  await page.waitForRequest(/.*preview\/pwa/);
-  await page.screenshot({ path: 'colosseum-iphone.png' });
+  await page.screenshot({ path: 'map.png' });
   await browser.close();
+  expect(page.url()).toBe('https://basra.win/');
 })();
