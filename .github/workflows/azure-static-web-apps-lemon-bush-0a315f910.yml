@@ -8,10 +8,7 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
-env:
-  AZURE_FUNCTIONAPP_NAME: GetSF-foodtrucks    # set this to your application's name
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '/AzureFunctions/Get-SFFoodTrucks/'      # set this to the path to your web app project, defaults to the repository root
-
+      
 jobs:
   lint-with-PSScriptAnalyzer:
     name: Install and run PSScriptAnalyzer
@@ -45,8 +42,8 @@ jobs:
       uses: Azure/functions-action@v1
       id: fa
       with:
-        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        app-name: 'GetSF-foodtrucks'
+        package: '/AzureFunctions/Get-SFFoodTrucks/'
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
 
   build_and_deploy_job_webfrontend:
