@@ -16,4 +16,4 @@ Add a folder named "bin" to "C:\home\site\wwwroot\" and then upload System.Devic
 
 <h3>Future Development</h3>
 
-Future Development will involve resolving errors related to pushpin visability and the creation of new features including the ability to manually enter a location and incorporation of more food truck datasets so that the application can be used outside San Franciso. If you would like to make a pull request, the CI/CD pipeline is setup using GitHub Actions with automated testing via PlayWright Test. 
+Future Development will involve resolving errors related to pushpin visability, polish unit testing, and add new features including the ability to manually enter a location and incorporation of more food truck datasets so that the application can be used outside San Franciso. If you would like to make a pull request, the CI/CD pipeline is setup using GitHub Actions with PowerShell linting and automated testing via PlayWright Test. 
