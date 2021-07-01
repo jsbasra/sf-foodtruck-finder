@@ -42,7 +42,7 @@ jobs:
       - uses: microsoft/playwright-github-action@v1
 
       - name: Install dependencies and run tests
-        run: npx playwright install-deps && npm test
+        run: npm i -D @playwright/test && npx playwright install && npx playwright test
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
