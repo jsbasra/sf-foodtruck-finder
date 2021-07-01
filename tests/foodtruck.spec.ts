@@ -18,7 +18,7 @@ test('basic test', async () => {
       console.log(37.74563668388077);
     }),
   ]);
-  await msg.args[0].jsonValue() 
+  await msg.args[0].jsonValue();
   await browser.close();
   expect(page.url()).toBe('https://basra.win/');
   //await context.setGeolocation({ longitude: 29.979097, latitude: 31.134256 });
