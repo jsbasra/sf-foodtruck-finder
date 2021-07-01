@@ -11,7 +11,7 @@ The backend of the application leverages the data provided by San Francisco's fo
 <h3>Azure Infrastructure</h3>
 If you want to deploy your own instance of this application, please look at the ARM Template arm.json in Azure Infrastructure folder. The default value of some parameters will need to be modified especially the hostname basra.win and repository url. After modifiying the parameters, The ARM Template can be deployed in a new resource group. This can be done by the following PowerShell Az cmdlets: <br>
 To create a new resource group use: <code>New-AzResourceGroup $RG</code> <br>
-and then deploy the ARM template use: <code>New-AzResourceGroupDeployment -ResourceGroupName $RG -TemplateFile $Path_to_arm </code>
+and then deploy the ARM template use: <br> <code>New-AzResourceGroupDeployment -ResourceGroupName $RG -TemplateFile $Path_to_arm </code>
 <br><br>
 After creating and deploying the Infrastructure. The Azure Function will need to be configured. Go to the Kudu Console advanced options and configure the Azure Function as follows:
 Add a folder named "bin" to "C:\home\site\wwwroot\" and then upload System.Device.dll to "C:\home\site\wwwroot\bin\" so that Get-SFfoodtruck can access it. This dll provides the .NET <a href="https://docs.microsoft.com/en-us/dotnet/api/system.device.location.geocoordinate?view=netframework-4.8">GeoCoordinate</a> Class and its methods. The PowerShell Script in the Azure Function uses the <a href="https://docs.microsoft.com/en-us/dotnet/api/system.device.location.geocoordinate.getdistanceto?view=netframework-4.8">GeoCoordinate.GetDistanceTo </a> method to calculate distances between the user and the food trucks. 
