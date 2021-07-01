@@ -8,6 +8,9 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+env:
+  AZURE_FUNCTIONAPP_NAME: GetSF-foodtrucks    # set this to your application's name
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '/AzureFunctions/Get-SFFoodTrucks/'      # set this to the path to your web app project, defaults to the repository root
 
 jobs:
   lint-with-PSScriptAnalyzer:
@@ -31,7 +34,22 @@ jobs:
           } else {
               Write-Output "There were $($errors.Count) errors and $($warnings.Count) warnings total."
           }
-  build_and_deploy_job:
+
+  build-and-deploy-functionapp:
+    runs-on: windows-latest
+    environment: dev
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@master
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+
+  build_and_deploy_job_webfrontend:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
@@ -52,8 +70,8 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
-          
-  e2e-tests:
+
+  web-tests:
     runs-on: ubuntu-latest # or macos-latest, windows-latest
     steps:
       - uses: actions/checkout@v2
