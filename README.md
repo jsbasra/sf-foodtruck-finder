@@ -1,5 +1,5 @@
 # sf-foodtruck-finder
-App that finds the 5 nearest food trucks in San Francisco based on the user's current location. 
+App that finds the 5 nearest food trucks in San Francisco based on the user's current location as required by https://github.com/timfpark/take-home-engineering-challenge .
 
 The app is accessible at: <a href="https://basra.win">basra.win</a>
 
