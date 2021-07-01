@@ -1,0 +1,19 @@
+Run the Local version of the script with these two tests to validate changes. Playwright Test, will use the same values for during each build.
+
+Test 1{
+Expected input:
+    $lat=39.1512064
+    $long=-76.74593279999999
+
+Expected output for locations[0]:
+    $lat=37.78623677446536
+}
+
+Test2 {
+Expected input:
+    $lat=37.754043
+    $long=-122.452672
+
+Expected output for locations[0]:
+    $lat=37.74563668388077
+}
