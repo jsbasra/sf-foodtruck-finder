@@ -43,7 +43,7 @@ jobs:
       id: fa
       with:
         app-name: 'GetSF-foodtrucks'
-        package: '/AzureFunctions/GetSF-foodtrucks/'
+        package: 'AzureFunctions/GetSF-foodtrucks'
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
 
   build_and_deploy_job_webfrontend:
