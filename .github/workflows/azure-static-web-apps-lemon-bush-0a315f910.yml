@@ -33,6 +33,7 @@ jobs:
           }
 
   build-and-deploy-functionapp:
+    needs: lint-with-PSScriptAnalyzer
     runs-on: windows-latest
     environment: dev
     steps:
@@ -69,6 +70,7 @@ jobs:
           ###### End of Repository/Build Configurations ######
 
   web-tests:
+    needs: build_and_deploy_job_webfrontend
     runs-on: ubuntu-latest # or macos-latest, windows-latest
     steps:
       - uses: actions/checkout@v2
