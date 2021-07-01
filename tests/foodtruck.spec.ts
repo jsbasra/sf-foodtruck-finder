@@ -1,6 +1,6 @@
-const { webkit, devices } = require('@playwright/test');
-test('basic test', async ({ page }) => {
-  
+const { test, expect, chromium } = require('@playwright/test');
+test('basic test', async () => {
+  const browser = await chromium.launch();
   const context = await browser.newContext({
   geolocation: { longitude: 48.858455, latitude: 2.294474 },
   permissions: ['geolocation']
