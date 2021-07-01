@@ -1,4 +1,4 @@
-const { webkit, devices } = require('playwright');
+const { webkit, devices } = require('@playwright/test');
 const iPhone11 = devices['iPhone 11 Pro'];
 
 (async () => {
