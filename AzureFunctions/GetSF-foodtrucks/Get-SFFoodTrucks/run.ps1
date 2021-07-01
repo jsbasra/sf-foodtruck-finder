@@ -9,13 +9,11 @@ param($Request, $TriggerMetadata)
 Write-Host "PowerShell HTTP trigger function processed a request."
 
 # Interact with query parameters or the body of the request.
+    #$name = $Request.Body.Name
+    [Double]$lat = $Request.Body.Lat
+    [Double]$long = $Request.Body.long
 
-#$name = $Request.Body.Name
-[Double]$lat = $Request.Body.Lat
-[Double]$long = $Request.Body.long
-
-Add-Type -Path "C:\home\site\wwwroot\bin\System.Device.dll"
-
+    Add-Type -Path "C:\home\site\wwwroot\bin\System.Device.dll"
     $foodtruckuri = "https://data.sfgov.org/api/views/rqzj-sfat/rows.csv"
     $foodtruckdata = $(Invoke-WebRequest -Uri $foodtruckuri).content | ConvertFrom-Csv -Delimiter ","
     if($null -eq $foodtruckdata){
