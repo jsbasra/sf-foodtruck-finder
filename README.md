@@ -8,7 +8,7 @@ The application is hosted on Microsoft Azure and utilizes a <a href="https://git
 
 The backend of the application leverages the data provided by San Francisco's food truck open dataset <a href="https://data.sfgov.org/Economy-and-Community/Mobile-Food-Facility-Permit/rqzj-sfat/data" rel="nofollow">located here</a> and an endpoint with a <a href="https://data.sfgov.org/api/views/rqzj-sfat/rows.csv" rel="nofollow">CSV dump of the latest data</a>. A storage account also has a copy for redundancy. 
 
-<h3>Azure Infrastructure</h3>
+<h3>Instructions to Setup Azure Infrastructure</h3>
 If you want to deploy your own instance of this application, please look at the ARM Template arm.json in Azure Infrastructure folder. The default value of some parameters will need to be modified especially the hostname basra.win and repository url. After modifiying the parameters, The ARM Template can be deployed in a new resource group. This can be done by the following PowerShell Az cmdlets: <br>
 To create a new resource group use: <code>New-AzResourceGroup $RG</code> <br>
 and then deploy the ARM template use: <br> <code>New-AzResourceGroupDeployment -ResourceGroupName $RG -TemplateFile $Path_to_arm </code>
