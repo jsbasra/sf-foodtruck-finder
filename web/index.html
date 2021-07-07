@@ -15,6 +15,8 @@
       height: 400px;
     }
   </style>
+      <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+      <style type='text/css'>body{margin:0;padding:0;overflow:hidden;font-family:'Segoe UI',Helvetica,Arial,Sans-Serif}</style>
 </head>
 
 <body>
@@ -28,7 +30,6 @@
   <div id="data-table"></div>
   <div id="myMap"></div>
   <div id="printoutPanel"></div>
-  <div id="newmap"></div>
   <script>
 
     var x = document.getElementById("locator");
@@ -70,14 +71,14 @@
           const locations = tableData.map(({Latitude,Longitude}) => ({Latitude,Longitude}))
           console.log(locations)
           console.log(locations[0].Latitude)
-          UpdateMap(locations)
+          loadMapScenario(locations)
         };
       }
     }
 
     function GetMap() { var map = new Microsoft.Maps.Map('#myMap'); }
 
-    function UpdateMap(locations) {
+    function loadMapScenario(locations) {
 
       var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});
       //Create an infobox at the center of the map but don't show it.
@@ -117,7 +118,14 @@
         Microsoft.Maps.Events.addHandler(pin, 'click', pushpinClicked);
         //Add pushpin to the map.
         map.entities.push(pin);
+        pins.push(pin);
         });
+        var y = document.getElementById("newmap");
+        const theUrl = `https://dev.virtualearth.net/REST/v1/Imagery/Map/imagerySet?&pushpin=${pins[0]}&pushpin=${pins[1]}&pushpin=${pins[2]}&pushpin=${pins[3]}&pushpin=${pins[4]}&&format=png&mapMetadata=1&key=ArVkVBWZgCzGEpWISQwd4V_OB-w0K67VZnUZTu6l2oeuhlNFnHaye27_wnVIIuYa`
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", theUrl, false );
+        xmlHttp.send( null );
+        y.innerHTML = xmlHttp.responseText;
 
       }
       
