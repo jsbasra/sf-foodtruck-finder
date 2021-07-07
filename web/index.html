@@ -5,18 +5,20 @@
   <title>SF FoodTrucks</title>
   <link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css" rel="stylesheet">
   <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
+  <script src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0" type="text/javascript"
+    charset="UTF-8"></script>
   <script type='text/javascript'
     src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=ArVkVBWZgCzGEpWISQwd4V_OB-w0K67VZnUZTu6l2oeuhlNFnHaye27_wnVIIuYa'
     async defer></script>
-  <style>
-    #myMap {
-      position: relative;
-      width: 600px;
-      height: 400px;
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+  <style type='text/css'>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'Segoe UI', Helvetica, Arial, Sans-Serif
     }
   </style>
-      <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-      <style type='text/css'>body{margin:0;padding:0;overflow:hidden;font-family:'Segoe UI',Helvetica,Arial,Sans-Serif}</style>
 </head>
 
 <body>
@@ -28,11 +30,12 @@
   </div>
 
   <div id="data-table"></div>
-  <div id="myMap"></div>
+  <div id="map" style="position: relative; width: 600px; height: 450px;"></div>
   <div id="printoutPanel"></div>
   <script>
 
     var x = document.getElementById("locator");
+    var pinInfobox;
 
     function getLocation() {
       if (navigator.geolocation) {
@@ -68,62 +71,54 @@
           });
           //console.log(tableData);
           //console.log(typeof tableData);
-          const locations = tableData.map(({Latitude,Longitude}) => ({Latitude,Longitude}))
+          const locations = tableData.map(({ Latitude, Longitude }) => ({ Latitude, Longitude }))
           console.log(locations)
-          console.log(locations[0].Latitude)
-          loadMapScenario(locations)
+          console.log(tableData[0].Latitude)
+          GetMap(tableData)
         };
       }
     }
 
-    function GetMap() { var map = new Microsoft.Maps.Map('#myMap'); }
+    function GetMap(tableData) {
 
-    function loadMapScenario(locations) {
-
-      var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});
-      //Create an infobox at the center of the map but don't show it.
-      var infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
-        visible: false
-      });
-
-      //Assign the infobox to a map instance.
-      infobox.setMap(map);
-
-      const pins = [];
-      //Create random locations in the map bounds.
-      //var randomLocations = Microsoft.Maps.TestDataGenerator.getLocations(5, );
-
-
-      for (var i = 0; i < locations.length; i++) {
-        Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
-        var searchManager = new Microsoft.Maps.Search.SearchManager(map);
-        var reverseGeocodeRequestOptions = {
-          location: new Microsoft.Maps.Location(locations[i].Latitude,locations[i].Longitude),
-          callback: function (answer, userData) {
-            map.setView({ bounds: answer.bestView });
-            map.entities.push(new Microsoft.Maps.Pushpin(reverseGeocodeRequestOptions.location));
-            document.getElementById('printoutPanel').innerHTML =
-            answer.address.formattedAddress;
-            }
-        };
-        
-        var pin = new Microsoft.Maps.Pushpin(reverseGeocodeRequestOptions.location);
-        searchManager.reverseGeocode(reverseGeocodeRequestOptions);
-        //Store some metadata with the pushpin.
-        pin.metadata = {
-          title: 'Pin ' + i,
-          description: 'Food Truck' + i
-          };
-        //Add a click event handler to the pushpin.
-        Microsoft.Maps.Events.addHandler(pin, 'click', pushpinClicked);
-        //Add pushpin to the map.
-        map.entities.push(pin);
-        pins.push(pin);
-        });
-
+      var pushpinInfos = [];
+      for (var i = 0; i < tableData.length; i++) {
+      pushpinInfos[i] = { 'lat': tableData[i].Latitude, 'lng': tableData[i].Longitude, 'title': tableData[i].Applicant, 'description': tableData[i].LocationDescription };
       }
-      
+      var infoboxLayer = new Microsoft.Maps.EntityCollection();
+      var pinLayer = new Microsoft.Maps.EntityCollection();
+      var apiKey = "ArVkVBWZgCzGEpWISQwd4V_OB-w0K67VZnUZTu6l2oeuhlNFnHaye27_wnVIIuYa";
 
+      var map = new Microsoft.Maps.Map(document.getElementById("map"), { credentials: apiKey });
+
+      // Create the info box for the pushpin
+      pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), { visible: false });
+      infoboxLayer.push(pinInfobox);
+
+      var locs = [];
+      for (var i = 0; i < pushpinInfos.length; i++) {
+        locs[i] = new Microsoft.Maps.Location(pushpinInfos[i].lat, pushpinInfos[i].lng);
+        var pin = new Microsoft.Maps.Pushpin(locs[i]);
+        pin.Title = pushpinInfos[i].title;
+        pin.Description = pushpinInfos[i].description;
+        pinLayer.push(pin);
+        Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox);
+      }
+
+      map.entities.push(pinLayer);
+      map.entities.push(infoboxLayer);
+
+      var bestview = Microsoft.Maps.LocationRect.fromLocations(locs);
+      map.setView({ center: bestview.center, zoom: 10 });
+    }
+
+    function displayInfobox(e) {
+      pinInfobox.setOptions({ title: e.target.Title, description: e.target.Description, visible: true, offset: new Microsoft.Maps.Point(0, 25) });
+      pinInfobox.setLocation(e.target.getLocation());
+    }
+
+    function hideInfobox(e) {
+      pinInfobox.setOptions({ visible: false });
     }
 
     function pushpinClicked(e) {
