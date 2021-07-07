@@ -120,12 +120,6 @@
         map.entities.push(pin);
         pins.push(pin);
         });
-        var y = document.getElementById("newmap");
-        const theUrl = `https://dev.virtualearth.net/REST/v1/Imagery/Map/imagerySet?&pushpin=${pins[0]}&pushpin=${pins[1]}&pushpin=${pins[2]}&pushpin=${pins[3]}&pushpin=${pins[4]}&&format=png&mapMetadata=1&key=ArVkVBWZgCzGEpWISQwd4V_OB-w0K67VZnUZTu6l2oeuhlNFnHaye27_wnVIIuYa`
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "GET", theUrl, false );
-        xmlHttp.send( null );
-        y.innerHTML = xmlHttp.responseText;
 
       }
       
