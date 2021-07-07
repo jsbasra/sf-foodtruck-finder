@@ -28,6 +28,7 @@
   <div id="data-table"></div>
   <div id="myMap"></div>
   <div id="printoutPanel"></div>
+  <div id="newmap"></div>
   <script>
 
     var x = document.getElementById("locator");
@@ -87,6 +88,7 @@
       //Assign the infobox to a map instance.
       infobox.setMap(map);
 
+      const pins = [];
       //Create random locations in the map bounds.
       //var randomLocations = Microsoft.Maps.TestDataGenerator.getLocations(5, );
 
@@ -100,26 +102,33 @@
             map.setView({ bounds: answer.bestView });
             map.entities.push(new Microsoft.Maps.Pushpin(reverseGeocodeRequestOptions.location));
             document.getElementById('printoutPanel').innerHTML =
-              answer.address.formattedAddress;
-          }
-
+            answer.address.formattedAddress;
+            }
         };
+        
         var pin = new Microsoft.Maps.Pushpin(reverseGeocodeRequestOptions.location);
         searchManager.reverseGeocode(reverseGeocodeRequestOptions);
-
         //Store some metadata with the pushpin.
         pin.metadata = {
           title: 'Pin ' + i,
           description: 'Food Truck' + i
-        };
-        
+          };
         //Add a click event handler to the pushpin.
         Microsoft.Maps.Events.addHandler(pin, 'click', pushpinClicked);
-
         //Add pushpin to the map.
         map.entities.push(pin);
+        pins.push(pin);
         });
+        var y = document.getElementById("newmap");
+        const theUrl = `https://dev.virtualearth.net/REST/v1/Imagery/Map/imagerySet?&pushpin=${pins[0]}&pushpin=${pins[1]}&pushpin=${pins[2]}&pushpin=${pins[3]}&pushpin=${pins[4]}&&format=png&mapMetadata=1&key=ArVkVBWZgCzGEpWISQwd4V_OB-w0K67VZnUZTu6l2oeuhlNFnHaye27_wnVIIuYa`
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", theUrl, false );
+        xmlHttp.send( null );
+        y.innerHTML = xmlHttp.responseText;
+
       }
+      
+
     }
 
     function pushpinClicked(e) {
